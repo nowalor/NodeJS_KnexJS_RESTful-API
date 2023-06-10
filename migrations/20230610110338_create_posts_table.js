@@ -1,5 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable('posts', table => {
+      table.increments('id').primary()
       table.integer('user_id').unsigned()
       table.string('title', 255)
       table.text('content')
