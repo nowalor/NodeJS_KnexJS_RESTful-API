@@ -40,6 +40,8 @@ async function createPost(req, res) {
         })
     }
 
+    res.send(req.auth)
+
     const { title, content } = req.body
 
     const post = await db('posts').insert({ title, content, user_id: user.id })

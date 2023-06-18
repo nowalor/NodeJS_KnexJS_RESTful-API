@@ -6,7 +6,7 @@ const tempKeyReplaceLater = '12345'
 async function login(req, res) {
     const { email, password } = req.body
 
-    const user = await db.select('*').from('users').where('email', email)
+    const user = await db.select('*').from('users').where('email', email).first()
 
     // TODO verify email
 
