@@ -8,6 +8,8 @@ async function login(req, res) {
 
     const user = await db.select('*').from('users').where('email', email)
 
+    // TODO verify email
+
    const token = jwt.sign({id: user.id, email: user.email}, tempKeyReplaceLater)
 
     res.send(token)
