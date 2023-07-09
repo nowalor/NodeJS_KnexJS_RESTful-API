@@ -1,6 +1,6 @@
 const db = require('../database/db')
 const jwt = require('jsonwebtoken')
-const bycrpt = require('bcrypt')
+const bcrypt = require('bcrypt')
 
 const tempKeyReplaceLater = '12345'
 
@@ -15,7 +15,7 @@ async function register(req, res) {
         })
     }
 
-    const hashedPassword = bycrpt.hashSync(password, 10)
+    const hashedPassword = bcrypt.hashSync(password, 10)
 
     const user = await db('users').insert({
         email,
@@ -38,11 +38,34 @@ async function login(req, res) {
 
     const user = await db.select('*').from('users').where('email', email).first()
 
-    // TODO verify email
+    if (typeof user === 'undefined') {
+        return res.status(401).json({
+            success: false,
+            message: 'Email or password is incorrect',
+        })
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password)
+
+    if(!isPasswordMatch) {
+        return res.status(401).json({
+            success: false,
+            message: 'Email or password is incorrect',
+        })
+    }
 
    const token = jwt.sign({id: user.id, email: user.email}, tempKeyReplaceLater)
 
-    res.send(token)
+    const data = {
+        id: user.id,
+        email,
+        token,
+    }
+
+    return res.status(200).json({
+        success: true,
+        data,
+    })
 }
 
 module.exports = { register, login }
