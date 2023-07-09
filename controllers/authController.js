@@ -1,10 +1,20 @@
 const db = require('../database/db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const { validationResult } = require('express-validator')
 
 const tempKeyReplaceLater = '12345'
 
 async function register(req, res) {
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()) {
+        return res.status(422).json({
+            success: false,
+            errors,
+        })
+    }
+
     const { email, password } = req.body
 
     const oldUser = await db.select('*').from('users').where('email', email).first()

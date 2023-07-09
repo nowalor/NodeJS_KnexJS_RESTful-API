@@ -32,7 +32,7 @@ async function createPost(req, res) {
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {
-        return res.status(422).json({success: false, errors: errors,})
+        return res.status(422).json({success: false, errors,})
     }
 
     const userId = req.param('id')
