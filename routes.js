@@ -2,7 +2,7 @@ const express= require('express')
 
 // Controllers
 const { getAllPosts, getSinglePost, createPost} = require('./controllers/postController')
-const { login } = require('./controllers/authController')
+const { login, register} = require('./controllers/authController')
 
 // Validation rules
 const { createPostRules } = require('./validation/postsValidation')
@@ -18,6 +18,7 @@ router.get('/posts/:id', getSinglePost)
 router.post('/users/:id/posts', createPostRules, authMiddleware, createPost)
 
 // Auth routes
+router.post('/auth/register', register)
 router.post('/auth/login', login)
 
 module.exports = router
