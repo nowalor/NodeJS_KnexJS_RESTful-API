@@ -16,10 +16,16 @@ async function getSinglePost(req, res) {
     const post = await db.select('*').from('posts').where('id', postId).first()
 
     if (!post) {
-        return res.send('Post not found')
+        return res.status(404).json({
+            success: false,
+            message: 'Post not found',
+        })
     }
 
-    return res.send(post)
+    return res.status(200).json({
+        success: true,
+        data: post,
+    })
 }
 
 async function createPost(req, res) {
